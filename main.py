@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 import uvicorn
 import pandas as pd
-from fastapi import HTTPException
+from fastapi.responses import HTMLResponse
 
 # Instanciamos FastAPI
 app = FastAPI()
