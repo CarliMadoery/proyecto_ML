@@ -169,7 +169,7 @@ async def genre( genero : str ):
     
     # Verifica si el género especificado se encuentra en el DataFrame.
     if df_filtrado.empty:
-        return print("El género especificado no se encuentra en la base de datos.") # El género no se encuentra en el DataFrame.
+        raise HTTPException(status_code=404, detail=f"El género '{genero}' no posee registros.") # El género no se encuentra en el DataFrame.
     
     # Obtiene el índice de la fila correspondiente al género especificado.
     puesto = df_filtrado.index[0].item() + 1  # Sumar 1 para obtener un ranking basado en 1 en lugar de 0.
