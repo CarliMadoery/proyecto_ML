@@ -27,7 +27,7 @@ async def userdata(User_id: str) -> dict:
     data1 = df_userdata_1[df_userdata_1['user_id'] == User_id]
     data2 = df_userdata_2[df_userdata_2['user_id'] == User_id]
     # Obtiene la Cantidad de items comprados por el usuario extrayendo el valor del campo 'items_count'
-    num_items = data1['items_count'].values[0].item() 
+    num_items = len(data1) - 1 
     # Calcula la cantidad de dinero gastado por el usuario (suma de la columna 'price')
     Dinero_gastado = data1['price'].sum()
     # Calcula el porcentaje de recomendación del usuario
