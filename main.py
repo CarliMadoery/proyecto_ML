@@ -2,11 +2,15 @@
 from fastapi import FastAPI
 import uvicorn
 import pandas as pd
+from fastapi import HTTPException
 
 # Instanciamos FastAPI
 app = FastAPI()
 
 # route http://127.0.0.1:8000
+@app.get("/")
+def index():
+    return {"message": "Hello World"}
 
 # Function 1
 @app.get("/userdata/{user_id}")
