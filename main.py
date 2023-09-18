@@ -153,7 +153,7 @@ async def developer(developer:str):
 
     # Validacion de dato
     if df_filter.empty:
-        raise HTTPException(status_code=404, detail=f"No se encontraron registros para la empresa {developer}")}
+        raise HTTPException(status_code=404, detail=f"No se encontraron registros para la empresa {developer}")
 
     # Agrupa por año y calcula la cantidad de juegos (item_id) y el porcentaje de contenido gratuito
     grouped = df_filter.groupby('release_year').agg(
