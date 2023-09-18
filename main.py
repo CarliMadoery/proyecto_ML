@@ -5,19 +5,8 @@ import pandas as pd
 
 # Instanciamos FastAPI
 app = FastAPI()
-# Cargamos los archivos a consumir
-df_userdata_1 = pd.read_parquet('Data/df_userdata_1.parquet')
-df_userdata_2 = pd.read_parquet('Data/df_userdata_2.parquet')
-df_countreviews = pd.read_parquet('Data/df_countreviews.parquet')
-df_genres = pd.read_parquet('Data/df_genres.parquet')
-df_top5 = pd.read_parquet('Data/df_top5.parquet')
-df_developer = pd.read_parquet('Data/df_developer.parquet')
-df_sentiment = pd.read_parquet('Data/df_sentiment.parquet')
 
-@app.get("/")  # decorator to define a route http://127.0.0.1:8000
-def index():
-    return {"message": "Hello World"}
-
+# route http://127.0.0.1:8000
 
 # Function 1
 @app.get("/userdata/{user_id}")
@@ -27,27 +16,18 @@ async def userdata(User_id: str) -> dict:
     - El dinero gastado por el usuario
     - El % de juegos que recomienda de todos los que adquirió
     '''
-    if type(User_id) is not str:
-        raise TypeError("El parametro debe ser string")
-    '''if User_id not in df_items_games.user_id:
-                 print('Usuario no encontrado') # Para debuggear'''
-                 
-
+    df_userdata_1 = pd.read_parquet('Data/df_userdata_1.parquet')
+    df_userdata_2 = pd.read_parquet('Data/df_userdata_2.parquet')
+    
     # Filtra el DataFrame para obtener solo las filas correspondientes al User_id proporcionado
     data1 = df_userdata_1[df_userdata_1['user_id'] == User_id]
     data2 = df_userdata_2[df_userdata_2['user_id'] == User_id]
-    
     # Obtiene la Cantidad de items comprados por el usuario extrayendo el valor del campo 'items_count'
-    num_items = data1['items_count'].values[0].item()
-    
+    num_items = data1['items_count'].values[0].item() 
     # Calcula la cantidad de dinero gastado por el usuario (suma de la columna 'price')
     Dinero_gastado = data1['price'].sum()
-    
     # Calcula el porcentaje de recomendación del usuario
     recommend_percentage = data2.recommend.sum()/len(data2)*100
-    
-
-    
     # Crea un diccionario con los resultados
     user_info = {
         'User_id': User_id,
@@ -70,6 +50,7 @@ async def countreviews(start_date: str, end_date: str):
         end_time (str): fecha de fin en formato 'YYYY-MM-DD'
 
     """
+    df_countreviews = pd.read_parquet('Data/df_countreviews.parquet')
     # Convierte las fechas de inicio y fin en objetos datetime
     start_date = pd.to_datetime(start_date)
     end_date = pd.to_datetime(end_date)
@@ -101,9 +82,10 @@ async def genre( genero : str ):
         genero (str): Género a buscar dentro de la base de datos.
 
     '''
+    df_genres = pd.read_parquet('Data/df_genres.parquet')
     # validacion de argumento ingresado
     if type(genero) is not str:
-        raise TypeError("El argumento debe ser de tipo string")
+        raise HTTPException(status_code=404, detail=f"El género '{genero}' no se encuentra en la base de datos.")
     # Convierte el género especificado a un formato consistente (primera letra en mayúscula, resto en minúsculas).
     genero = genero.lower().capitalize()
     # Filtra el DataFrame en función del género especificado.
@@ -130,15 +112,13 @@ async def userforgenre(genero:str):
     La presente función recibe como argumento el nombre de un género (str) y devuelve el 
     Top 5 de usuarios con más horas de juego en dado género, con su URL y user_id.
     '''
-    #validacion de argumento
-    if not isinstance(genero, str):
-        raise TypeError("El argumento 'género' debe ser una cadena (str)")
-    
+    df_top5 = pd.read_parquet('Data/df_top5.parquet')
+    #validacion de argumento    
     # Filtramos el DataFrame para incluir solo las filas relacionadas con el género especificado.
     df_filtrado = df_top5[df_top5['genres'].str.contains(genero, case=False, na=False)]
 
     if df_filtrado.empty:
-        return print("No se encontraron registros para el género", genero)
+        raise HTTPException(status_code=404, detail=f"El género '{genero}' no posee registros.")
     
     # Se agrupan los datos por usuario y url sumando las horas jugadas.
     df_agrupado = df_filtrado.groupby(['user_id','user_url'])['playtime_forever'].sum().reset_index()
@@ -165,9 +145,7 @@ async def developer(developer:str):
     Return:
         diccionario con la cantidad total de items y el % de items gratis en cada año para esa empresa
     '''
-    # Validacion de argumento
-    if not isinstance(developer, str):
-        raise TypeError("El argumento debe ser una cadena (str)")
+    df_developer = pd.read_parquet('Data/df_developer.parquet')
     # Convierte el texto ingresado a un formato consistente (primera letra en mayúscula, resto en minúsculas).
     developer = developer.lower().capitalize()
     # Filtra el DataFrame para obtener solo los juegos del desarrollador especificado
@@ -175,7 +153,7 @@ async def developer(developer:str):
 
     # Validacion de dato
     if df_filter.empty:
-        return {"mensaje": f"No se encontraron registros para la empresa {developer}"}
+        raise HTTPException(status_code=404, detail=f"No se encontraron registros para la empresa {developer}")}
 
     # Agrupa por año y calcula la cantidad de juegos (item_id) y el porcentaje de contenido gratuito
     grouped = df_filter.groupby('release_year').agg(
@@ -199,10 +177,12 @@ async def sentiments_analysis(year:int) -> dict:
     Returns:
         dict: Un diccionario con la cantidad de cada tipo de sentimiento.
     '''
+    df_sentiment = pd.read_parquet('Data/df_sentiment.parquet')
     # Validación de argumento 
     list_anios = df_sentiment.formatted_date.dt.year.to_list()
     if year not in list_anios:
-        return {'message': 'No hay registros para el año ingresado'}
+        raise HTTPException(status_code=404, detail=f"No hay registros para el año ingresado")
+        
     # Filtrar el DataFrame por el año especificado
     df_filtered = df_sentiment[df_sentiment['formatted_date'].dt.year == year]
 
