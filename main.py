@@ -6,7 +6,7 @@ import pandas as pd
 # Instanciamos FastAPI
 app = FastAPI()
 # Cargamos los archivos a consumir
-df_userdata_1 = pd.read_parquet('Data/df_userdata_1.parquet')
+df_userdata_1 = pd.read_parquet('Data\\df_userdata_1.parquet')
 df_userdata_2 = pd.read_parquet('Data\df_userdata_2.parquet')
 df_countreviews = pd.read_parquet('Data\df_countreviews.parquet')
 df_genres = pd.read_parquet('Data\df_genres.parquet')
