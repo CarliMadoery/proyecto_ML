@@ -8,9 +8,80 @@ from fastapi import HTTPException
 app = FastAPI()
 
 # route http://127.0.0.1:8000
-@app.get("/")
-def index():
-    return {"message": "Hello World"}
+@app.get("/", response_class=HTMLResponse)
+async def get_main_page():
+    page_content = """
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Página Web en FastAPI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: ##585858;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto; 
+            padding: 20px;
+            background-color: #ACE1CB; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            border-radius: 5px;
+            position: relative; 
+        }
+        h1 {
+            color: #333;
+            text-align: center; 
+        }
+        h3 {
+            color: #666;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px; 
+            right: 10px; 
+            font-size: 12px; 
+            color: #999; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a la Steam-API</h1>
+        <h3>En este espacio podrá encontrar información relacionada a la base de datos de Steam, una plataforma de videojuegos.</h3>
+        <p>Usted puede realizar una serie de consultas en torno a esta información</p>
+        
+        <b>Siga el siguiente enlace para poder acceder a ella</b>
+        
+        <div class="button-container">
+            <a class="button" href="/docs">Consultar Información</a>
+        </div>
+
+        <p class="footer">Autor: Carlos Madoery - 2023.</p>
+    </div>
+</body>
+</html>
+
+    """
+    return page_content
 
 # Function 1
 @app.get("/userdata/{user_id}")
