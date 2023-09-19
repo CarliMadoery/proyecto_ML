@@ -129,13 +129,22 @@ async def countreviews(start_date: str, end_date: str):
         end_time (str): fecha de fin en formato 'YYYY-MM-DD'
 
     """
-    df_countreviews = pd.read_parquet('Data/df_countreviews.parquet')
-    # Convierte las fechas de inicio y fin en objetos datetime
-    start_date = pd.to_datetime(start_date)
-    end_date = pd.to_datetime(end_date)
+
+    try:
+        # Convierte las fechas de inicio y fin en objetos datetime
+        start_date = pd.to_datetime(start_date)
+        end_date = pd.to_datetime(end_date)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Las fechas ingresadas no están en el formato 'YYYY-MM-DD'.")
+
+    if start_date > end_date:
+        raise HTTPException(status_code=400, detail="La fecha de inicio es mayor que la fecha de fin.")
 
     # Filtra las reseñas que están dentro del rango de fechas dado
     filtered_reviews = df_countreviews[(df_countreviews['formatted_date'] >= start_date) & (df_countreviews['formatted_date'] <= end_date)]
+
+    if filtered_reviews.empty:
+        raise HTTPException(status_code=404, detail=f"No hay registros para las fechas ingresadas.")
 
     # Obtiene la cantidad de usuarios únicos que realizaron reseñas en ese rango
     unique_users = filtered_reviews['user_id'].nunique()
