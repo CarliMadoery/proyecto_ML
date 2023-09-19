@@ -98,8 +98,8 @@ async def userdata(User_id: str) -> dict:
     # Filtra el DataFrame para obtener solo las filas correspondientes al User_id proporcionado
     data1 = df_userdata_1[df_userdata_1['user_id'] == User_id]
     data2 = df_userdata_2[df_userdata_2['user_id'] == User_id]
-
-    if data1.empty:
+    # Valida el dato ingresado
+    if data1.empty and data2.empty:
         raise HTTPException(status_code=404, detail=f"El usuario '{User_id}' no posee registros.")
     # Obtiene la Cantidad de items comprados por el usuario extrayendo el valor del campo 'items_count'
     num_items = len(data1) - 1 
