@@ -285,3 +285,37 @@ async def sentiments_analysis(year:int) -> dict:
     }
 
     return result_dict
+
+# Function 7
+@app.get("/recommend_games/{game_id}")
+async def recommend_games(game_id:int):
+    df_games = pd.read_csv('Data\df_games.csv')
+    df_final_games = pd.read_parquet('Data\df_final_games.parquet')
+    # Verifica si el juego con game_id existe en df_games
+    game = df_games[df_games['id'] == game_id]
+    
+    if game.empty:
+        return {"message": "Juego no encontrado"}
+    
+    # Obtiene el índice del juego dado
+    idx = game.index[0]
+
+    # Calcula la similitud de contenido
+    similitudes = cosine_similarity(df_final_games.iloc[:, 3:])
+    
+    # Obtiene las puntuaciones de similitud del juego dado con otros juegos
+    sim_scores = list(enumerate(similitudes[idx]))
+    
+    # Ordena los juegos por similitud en orden descendente
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    
+    # Obtiene los 5 juegos más similares (excluyendo el juego dado)
+    similar_games = sim_scores[1:6]
+    
+    # Obtiene los nombres de los juegos similares
+    game_indices = [i[0] for i in similar_games]
+    
+    # Lista de juegos similares (solo nombres)
+    similar_game_names = df_games['title'].iloc[game_indices].tolist()
+    
+    return {"similar_games": similar_game_names}
