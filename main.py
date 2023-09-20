@@ -290,7 +290,7 @@ async def sentiments_analysis(year:int) -> dict:
 # Function 7
 @app.get("/recommend_games/{game_id}")
 async def recommend_games(game_id:int):
-    df_games = pd.read_csv('Data/df_games.csv')
+    df_games = pd.read_parquet('Data/df_games.parquet')
     df_final_games = pd.read_parquet('Data/df_final_games.parquet')
     # Verifica si el juego con game_id existe en df_games
     game = df_games[df_games['id'] == game_id]
