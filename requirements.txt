@@ -3,4 +3,4 @@ numpy
 pandas
 uvicorn
 pyarrow
-sklearn
+scikit-learn
