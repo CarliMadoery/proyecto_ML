@@ -286,37 +286,41 @@ async def sentiments_analysis(year:int) -> dict:
     }
 
     return result_dict
-
+    
 # Function 7
 @app.get("/recommend_games/{game_id}")
-async def recommend_games(game_id:int):
+async def recommend_games(game_id: int):
+    '''
+    Esta función recomienda 5 juegos a partir del juego ingresado.
+
+    Args:
+        game_id (int): ID único del videojuego al cual se le harán las recomendaciones.
+    '''
     df_games = pd.read_parquet('Data/df_games.parquet')
     df_final_games = pd.read_parquet('Data/df_final_games.parquet')
     # Verifica si el juego con game_id existe en df_games
     game = df_games[df_games['id'] == game_id]
-    
+
     if game.empty:
         return {"message": "Juego no encontrado"}
-    
+
     # Obtiene el índice del juego dado
     idx = game.index[0]
 
-    # Calcula la similitud de contenido
-    similitudes = cosine_similarity(df_final_games.iloc[:, 3:])
-    
+    # Calcula la similitud de contenido solo para el juego dado
+    sim_scores = cosine_similarity([df_final_games.iloc[idx, 3:]], df_final_games.iloc[:, 3:])
+
     # Obtiene las puntuaciones de similitud del juego dado con otros juegos
-    sim_scores = list(enumerate(similitudes[idx]))
-    
+    sim_scores = sim_scores[0]
+
     # Ordena los juegos por similitud en orden descendente
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    
-    # Obtiene los 5 juegos más similares (excluyendo el juego dado)
-    similar_games = sim_scores[1:6]
-    
-    # Obtiene los nombres de los juegos similares
-    game_indices = [i[0] for i in similar_games]
-    
+    similar_games = [(i, sim_scores[i]) for i in range(len(sim_scores)) if i != idx]
+    similar_games = sorted(similar_games, key=lambda x: x[1], reverse=True)
+
+    # Obtiene los 5 juegos más similares
+    similar_game_indices = [i[0] for i in similar_games[:5]]
+
     # Lista de juegos similares (solo nombres)
-    similar_game_names = df_games['title'].iloc[game_indices].tolist()
-    
+    similar_game_names = df_games['title'].iloc[similar_game_indices].tolist()
+
     return {"similar_games": similar_game_names}
