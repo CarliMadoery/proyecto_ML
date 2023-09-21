@@ -296,19 +296,22 @@ async def recommend_games(game_id: int):
     Args:
         game_id (int): ID único del videojuego al cual se le harán las recomendaciones.
     '''
-    df_games = pd.read_parquet('Data/df_games.parquet')
     df_final_games = pd.read_parquet('Data/df_final_games.parquet')
     # Verifica si el juego con game_id existe en df_games
-    game = df_games[df_games['id'] == game_id]
+    game = df_final_games[df_final_games['id'] == game_id]
 
     if game.empty:
-        return {"message": "Juego no encontrado"}
-
+        raise HTTPException(status_code=404, detail=f"El juego '{game_id}' no posee registros.")
+    
     # Obtiene el índice del juego dado
     idx = game.index[0]
 
-    # Calcula la similitud de contenido solo para el juego dado
-    sim_scores = cosine_similarity([df_final_games.iloc[idx, 3:]], df_final_games.iloc[:, 3:])
+    # Toma una muestra aleatoria del DataFrame df_games
+    sample_size = 10000  # Define el tamaño de la muestra (ajusta según sea necesario)
+    df_sample = df_final_games.sample(n=sample_size, random_state=42)  # Ajusta la semilla aleatoria según sea necesario
+
+    # Calcula la similitud de contenido solo para el juego dado y la muestra
+    sim_scores = cosine_similarity([df_final_games.iloc[idx, 3:]], df_sample.iloc[:, 3:])
 
     # Obtiene las puntuaciones de similitud del juego dado con otros juegos
     sim_scores = sim_scores[0]
@@ -321,6 +324,6 @@ async def recommend_games(game_id: int):
     similar_game_indices = [i[0] for i in similar_games[:5]]
 
     # Lista de juegos similares (solo nombres)
-    similar_game_names = df_games['title'].iloc[similar_game_indices].tolist()
+    similar_game_names = df_sample['title'].iloc[similar_game_indices].tolist()
 
     return {"similar_games": similar_game_names}
