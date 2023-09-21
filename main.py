@@ -306,7 +306,7 @@ async def recommend_games(game_id: int):
     idx = game.index[0]
 
     # Toma una muestra aleatoria del DataFrame df_games
-    sample_size = 3000  # Define el tamaño de la muestra (ajusta según sea necesario)
+    sample_size = 2000  # Define el tamaño de la muestra (ajusta según sea necesario)
     df_sample = df_final_games.sample(n=sample_size, random_state=42)  # Ajusta la semilla aleatoria según sea necesario
 
     # Calcula la similitud de contenido solo para el juego dado y la muestra
