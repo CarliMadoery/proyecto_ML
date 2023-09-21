@@ -9,7 +9,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Instanciamos FastAPI
 app = FastAPI()
 
-# route http://127.0.0.1:8000
 @app.get("/", response_class=HTMLResponse)
 async def get_main_page():
     page_content = """
