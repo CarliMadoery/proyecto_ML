@@ -1,7 +1,7 @@
 
 # <h1 align=center>**Proyecto Integrador Data Science**</h1>
 <p align="center">
- <img src="steam-logo-black-transparent.png"  height=150>
+ <img src="images/steam-logo-black-transparent.png"  height=150>
 </p>
 
 # <h1 align=center> **`MACHINE LEARNING OPERATIONS (MLOps)`** </h1>
