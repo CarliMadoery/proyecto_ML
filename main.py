@@ -86,8 +86,7 @@ async def get_main_page():
 
 # Function 1
 @app.get("/userdata/{user_id}")
-async def userdata(User_id: str= Query(...,  
-                                example="EchoXSilence")) -> dict:
+async def userdata(User_id: str) -> dict:
     '''Dado un id de usuario igresado, la función retorna:
     - La cantidad de juegos que adquirió el usuario
     - El dinero gastado por el usuario
