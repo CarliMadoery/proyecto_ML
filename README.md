@@ -32,7 +32,7 @@ En enero de 2016, Steam contaba con más de 7300 juegos disponibles. Además con
 
 La siguiente imagen es una captura de pantalla de la web de estadísticas de Steam donde muestra en tiempo real la cantidad de usarios activos en los úlitmos 2 días.
 <p align="center">
-<img src="steam_stacs.jpg"  height=500>
+<img src="images/steam_stacs.jpg"  height=500>
 </p>
 
 ## DATOS
