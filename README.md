@@ -44,7 +44,7 @@ Para el desarrollo del proyecto contamos con 3 datasets:
 
 - steam_games.json.gz: es un dataset que contiene información detallada de todos los juegos en sí, como los título, el desarrollador, los precios, características técnicas, etiquetas, entre otros datos.
 
-En el documento [Diccionario de datos](Diccionario de Datos STEAM.xlsx) se encuetran los detalles de cada una de las variables de los conjuntos de datos.
+En el documento [Diccionario de datos]([Diccionario de Datos STEAM.xlsx](https://github.com/Theramon88/proyecto_ML/blob/c838914811ee937a1004f54e23a2546b1d0e884e/Diccionario%20de%20Datos%20STEAM.xlsx)) se encuetran los detalles de cada una de las variables de los conjuntos de datos.
 
 # DESARROLLO GENERAL
 
