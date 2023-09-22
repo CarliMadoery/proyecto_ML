@@ -130,7 +130,7 @@ async def countreviews(start_date: str, end_date: str):
         end_time (str): fecha de fin en formato 'YYYY-MM-DD'
 
     """
-
+    df_countreviews = pd.read_parquet('Data/df_countreviews.parquet')
     try:
         # Convierte las fechas de inicio y fin en objetos datetime
         start_date = pd.to_datetime(start_date)
