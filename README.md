@@ -55,9 +55,7 @@ Se realizó la extracción, transformación y carga de los tres conjuntos de dat
 Dos de los archivos presentaban errores de sintaxis lo cual dificultó un tanto este proceso ya que se debieron utilizar algunas técnicas y librerías adicionales para poder leer correctamente los archivos.
 Por otra parte algunos datos se encontraban anidados, es decir había columnas con diccionarios o listas de diccionarios, por lo que aplicaron distintas estrategias para transformar las claves de esos diccionarios en columnas. Luego se rellenaron algunos nulos de variables necesarias para el proyecto, se borraron columnas con muchos nulos o que no aportaban al proyecto, para optimizar el rendimiento de la API y teneniendo en cuenta las limitaciones de almacenamiento del deploy. Para las transformaciones se utilizó la librería Pandas.
 
-Los detalles del ETL se puede ver en [ETL]()
-
-## DESARROLLO DE FUNCIONES Y API
+### DESARROLLO DE FUNCIONES Y API
 
 Para el desarrolo de la API se decidió utilizar el framework FastAPI, creando las siguientes funciones:
 
@@ -87,7 +85,11 @@ Para el desarrolo de la API se decidió utilizar el framework FastAPI, creando l
 
 * **recomendacion_usuario**: Esta función recibe como parámetro el id de un usuario y devuelve una lista con 5 juegos recomendados para dicho usuario teniendo en cuenta las similitudes entre los usuarios.
 
-## ANÁLISIS EXPLORATORIO DE DATOS (EDA)
+Los detalles del desarrollo general se puede ver en [Desarrollo](Desarrollo.ipynb)
+
+## EDA - Sistema de RECOMENDACIÓN 
+
+### ANÁLISIS EXPLORATORIO DE DATOS (EDA)
 
 Si bien la etapa de ETL va acompañada de un primer análisis exploratorio de los datos, previo al modelado de las variables a utilizar en el sistema de recomendación se realizó un EDA enfocado en este resultado.
 Con el objetivo de investigar las relaciones entre variables del dataset, ver si hay outliers o anomalías o si hay algún patrón interesante que valga la pena explorar en un análisis posterior.
@@ -97,9 +99,8 @@ Para esto se utilizó la librería Pandas para la manipulación de los datos y l
 
 Como resultado de este proceso se construyó un dataframe con el ID de usuario, los nombres de los juegos y el campo "tags" utilizados para hallar las similitud coseno entre los juegos. 
 
-El desarrollo de este análisis se encuentra en la Jupyter Notebook [EDA](https://github.com/EDA.ipynb)
 
-## SISTEMA DE RECOMENCACIÓN (MACHINE LEARNING)
+### SISTEMA DE RECOMENCACIÓN (MACHINE LEARNING)
 
 El desafío en esta instancia era desarrollar un sistema de recomendación utilizando técnicas de aprendizaje supervisado que pueda ser accesible a través de la API, para el mismo se debía desarrollar la siguiente función:
     
@@ -111,14 +112,14 @@ El modelo tiene una relación ítem-ítem, esto es, se toma un juego y en base a
 Para medir la similitud entre los juegos (item_similarity) se utilizó la **similitud del coseno** que es una medida comúnmente utilizada para evaluar la similitud entre dos vectores en un espacio multidimensional. En el contexto de sistemas de recomendación y análisis de datos, la similitud del coseno se utiliza para determinar cuán similares son dos conjuntos de datos o elementos, y se calcula utilizando el coseno del ángulo entre los vectores que representan esos datos o elementos.
 En este caso esta técnica se aplicó utilizando las "tags" de los juegos, las cuales son características específicas de cada juego. El modelo encuentra similitudes basandose en estos atributos.
 
-El desarrollo para la creación del modelo se presenta en la Jupyter Notebook [Modelo_recomendacion](https://github.com/_Modelo_recomendacion.ipynb).
+El desarrollo del EDA y la creación del modelo se presenta en la Jupyter Notebook [EDA_ML](EDA_ML.ipynb)).
 
 
 ## DEPLOYMENT
 
 Para el deploy de la API se seleccionó la plataforma Render que es una nube unificada para crear y ejecutar aplicaciones y sitios web, permitiendo el despliegue automático desde GitHub. Para esto se siguieron estos pasos:
 
-- Generación de un Dockerfile cuya imagen es Python 3.11. Esto se hace porque Render usa por defecto Python 3.7, lo que no es compatible con las versiones de las librerías trabajadas en este proyecto, por tal motivo, se optó por deployar el proyecto dentro de este contenedor. Se puede ver el detalle del documento [Dockerfile](https://github.com/Dockerfile).
+- Generación de un Dockerfile cuya imagen es Python 3.11. Esto se hace porque Render usa por defecto Python 3.7, lo que no es compatible con las versiones de las librerías trabajadas en este proyecto, por tal motivo, se optó por deployar el proyecto dentro de este contenedor. Se puede ver el detalle del documento [Dockerfile](dockerfile).
 
 - Se generó un servicio nuevo  en `render.com`, conectado al presente repositorio y utilizando Docker como Runtime.
 - Finalmente, el servicio queda corriendo en [https://fastapi-t91i.onrender.com/](https://fastapi-t91i.onrender.com/).
