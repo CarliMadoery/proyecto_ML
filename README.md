@@ -102,6 +102,11 @@ Con el objetivo de investigar las relaciones entre variables del dataset, ver si
 Se tomó la decisión de resolver el modelo mediante un enfoque items-items, el cual busca realizar recomendaciones en base a similitudes entre los juegos, utilizando la técnica "similitud coseno". A partir de esta decisión, esta etapa se centró sólo en los datos escogidos para el desarrollo del modelo, los cuales estaban contenidos en en dataset 'steam_games'.
 Para esto se utilizó la librería Pandas para la manipulación de los datos y las librerías Matplotlib y Seaborn para la visualización.
 
+*algo de lo que fue la visualización*
+<p align="center">
+ <img src="images/grafica_tags.png"  height=150>
+</p>
+
 Como resultado de este proceso se construyó un dataframe con el ID de usuario, los nombres de los juegos y el campo "tags" utilizados para hallar las similitud coseno entre los juegos. 
 
 
