@@ -88,7 +88,6 @@ Para el desarrolo de la API se decidió utilizar el framework FastAPI, creando l
 
 * **recomendacion_juego**: Esta función recibe como parámetro el nombre de un juego y devuelve una lista con 5 juegos recomendados similares al ingresado.
 
-* **recomendacion_usuario**: Esta función recibe como parámetro el id de un usuario y devuelve una lista con 5 juegos recomendados para dicho usuario teniendo en cuenta las similitudes entre los usuarios.
 
 Los detalles del desarrollo general se puede ver en [Desarrollo](Desarrollo.ipynb)
 
